@@ -33,9 +33,9 @@ Input.writeFile("Decode3.txt", dec3);
 
 // Reverses a string
 String reverse(String text) {
-String result = "";
-for (int i = 0; i < text.length(); i++) {
-result = text.charAt(i) + result;
+    String result = "";
+    for (int i = 0; i < text.length(); i++) {
+    result = text.charAt(i) + result;
 }
 return result;
 }
@@ -44,8 +44,8 @@ return result;
 
 String shiftForward(String text) {
 String result = "";
-for (int i = 0; i < text.length(); i++) {
-result += (char)(text.charAt(i) + 1);
+    for (int i = 0; i < text.length(); i++) {
+    result += (char)(text.charAt(i) + 1);
 }
 return result;
 }
@@ -54,8 +54,8 @@ return result;
 
 String shiftBackward(String text) {
 String result = "";
-for (int i = 0; i < text.length(); i++) {
-result += (char)(text.charAt(i) - 1);
+    for (int i = 0; i < text.length(); i++) {
+    result += (char)(text.charAt(i) - 1);
 }
 return result;
 }
@@ -63,13 +63,13 @@ return result;
 
 String substitute(String text, char[] from, char[] to) {
 String result = "";
-for (int i = 0; i < text.length(); i++) {
-char current = text.charAt(i);
-int index = indexOf(current, from);
-if (index != -1) {
-result += to[index];
-} else {
-result += current;
+    for (int i = 0; i < text.length(); i++) {
+    char current = text.charAt(i);
+    int index = indexOf(current, from);
+    if (index != -1) {
+    result += to[index];
+}  else {
+    result += current;
 }
 }
 return result;
@@ -77,8 +77,8 @@ return result;
 
 
 int indexOf(char c, char[] array) {
-for (int i = 0; i < array.length; i++) {
-if (array[i] == c) {
+    for (int i = 0; i < array.length; i++) {
+    if (array[i] == c) {
 return i;
 }
 }
