@@ -1,134 +1,87 @@
 class Main {
-  public static void main(String[] args) {
-    (new Main()).init();
-  }
-  void print(Object o){ System.out.println(o);}
-  void printt(Object o){ System.out.print(o);}
 
-  void init(){
-   
-    // 
-    char[] sub = new char[8];
-    sub[0] = 'a';
-    sub[1] = 'e';
-    sub[2] = 'i';
-    sub[3] = 'o';
-    sub[4] = 'u';
-    sub[5] = 't';
-    sub[6] = 'h';
-    sub[7] = 'b';
-    // Array2: Unicode characters
-    char[] sub2 = new char[8];
-    sub2[0] = '4';  
-    sub2[1] = '2';  
-    sub2[2] = '6';  
-    sub2[3] = '3';  
-    sub2[4] = '7'; 
-    sub2[5] = '1'; 
-    sub2[6] = '9'; 
-    sub2[7] = '8'; 
 
-    
-    // Encoding the plaintext:
-    String file = Input.readFile("Original.txt");
-    // Encode level 1 (substitution)
-    String encodedMsg1 = subEncryption(file,sub,sub2);
-    Input.writeFile("Encode1.txt", encodedMsg1);
-    // // Encode level 2 (cipher with no wrap)
-    String encodedMsg2 = encode(encodedMsg1);
-    Input.writeFile("Encode2.txt", encodedMsg2);
-    // // Encode level 3 (string manipulation - reverse)
-    String encodedMsg3 = reverse(encodedMsg2);
-    Input.writeFile("Encode3.txt", encodedMsg3);
+// Layer 2: ASCII +1 cipher
+String enc2 = shiftForward(enc1);
+Input.writeFile("Encode2.txt", enc2);
 
-    
-    // Decoding the ciphertext: 
-    String file2 = Input.readFile("Encode3.txt");
-    // Decode level 1  (string manipulation - reverse)
-    String decodedMsg1 = reverse(file2);
-    Input.writeFile("Decode1.txt", decodedMsg1);
-    // Decode level 2 (cipher with no wrap)
-    String decodedMsg2 = decode(decodedMsg1);
-    Input.writeFile("Decode2.txt", decodedMsg2);
-    // Decode level 3 (substitution)
-    String decodedMsg3 = subEncryption(decodedMsg2, sub2, sub);
-    Input.writeFile("Decode3.txt", decodedMsg3);
-    
-    
-  }
-  // reverse a string
-  String reverse(String txt){
-    String build ="";
-    for(int x=0; x<= txt.length()-1; x++){
-      build = txt.charAt(x) + build;
-    }
-    return build;
-  }
-  
-  
-  // Cipher +1 encoding with no wrapping
-  String encode(String txt){
-    String build = "";
-    int ascii = 0;
-    char ch = '\0';
-    
-    for(int x=0; x<=txt.length()-1; x++){
-      ch = txt.charAt(x);
-      ascii = (int)ch;
-      ascii += 1;
-      
-      build += (char)ascii;
-    }     
-    return build;
-  }
 
-  // Cipher -1 encoding with no wrapping
-  String decode(String txt){
-    String build="";
-    int ascii;
-    char ch='\0';
-    for(int x=0; x<=txt.length()-1; x++){
-      ch=txt.charAt(x);
-      ascii = (int)ch;
-      ascii -= 1;
-        build += (char)ascii;
-    }
-    return build;
-  }
+// Layer 3: Reverse string
+String enc3 = reverse(enc2);
+Input.writeFile("Encode3.txt", enc3);
 
-  // Substitution encoding
-  String subEncryption(String s, char[] sub, char[] sub2){
-    String build = "";
-    char ch ='\0';
-    int index=0;
-    
-    for(int x=0; x<=s.length()-1; x++){
-      ch = s.charAt(x);
-      index = indexOf(ch,sub);
-      if(index != -1){
-        build += sub2[index];
-      }
-      else{
-        build += ch;
-      }
-    }
-    return build;
-  }
 
-  // identifying index of char within array
-  int indexOf(char ch, char[] arry){
-    for(int x=0; x<=arry.length-1; x++){
-      if(arry[x] == ch){
-        return x;
-      }
-    }
-    return -1;
-  }
+// -------- DECRYPTION --------
+String encryptedText = Input.readFile("Encode3.txt");
 
-  // random integer generator
-  int randInt(int lower, int upper){
-    int range = upper - lower + 1;
-    return (int)(Math.random()*range) + lower;
-  }
 
+// Reverse string back
+String dec1 = reverse(encryptedText);
+Input.writeFile("Decode1.txt", dec1);
+
+
+// ASCII -1 cipher
+String dec2 = shiftBackward(dec1);
+Input.writeFile("Decode2.txt", dec2);
+
+
+// Reverse Webdings substitution
+String dec3 = substitute(dec2, symbols, letters);
+Input.writeFile("Decode3.txt", dec3);
+}
+
+
+// Reverses a string
+String reverse(String text) {
+String result = "";
+for (int i = 0; i < text.length(); i++) {
+result = text.charAt(i) + result;
+}
+return result;
+}
+
+
+
+String shiftForward(String text) {
+String result = "";
+for (int i = 0; i < text.length(); i++) {
+result += (char)(text.charAt(i) + 1);
+}
+return result;
+}
+
+
+
+String shiftBackward(String text) {
+String result = "";
+for (int i = 0; i < text.length(); i++) {
+result += (char)(text.charAt(i) - 1);
+}
+return result;
+}
+
+
+String substitute(String text, char[] from, char[] to) {
+String result = "";
+for (int i = 0; i < text.length(); i++) {
+char current = text.charAt(i);
+int index = indexOf(current, from);
+if (index != -1) {
+result += to[index];
+} else {
+result += current;
+}
+}
+return result;
+}
+
+
+int indexOf(char c, char[] array) {
+for (int i = 0; i < array.length; i++) {
+if (array[i] == c) {
+return i;
+}
+}
+return -1;
+}
 }
