@@ -11,23 +11,47 @@ String enc3 = reverse(enc2);
 Input.writeFile("Encode3.txt", enc3);
 
 
-// -------- DECRYPTION --------
+// Encoding the plaintext:
+    String file = Input.readFile("Original.txt");
+    // Encode level 1 (substitution)
+    String encodedMsg1 = subEncryption(file,sub,sub2);
+    Input.writeFile("Encode1.txt", encodedMsg1);
+    // // Encode level 2 (cipher with no wrap)
+    String encodedMsg2 = encode(encodedMsg1);
+    Input.writeFile("Encode2.txt", encodedMsg2);
+    // // Encode level 3 (string manipulation - reverse)
+    String encodedMsg3 = reverse(encodedMsg2);
+    Input.writeFile("Encode3.txt", encodedMsg3);
+
+
+   
+    // Decoding the ciphertext:
+    String file2 = Input.readFile("Encode3.txt");
+    // Decode level 1  (string manipulation - reverse)
+    String decodedMsg1 = reverse(file2);
+    Input.writeFile("Decode1.txt", decodedMsg1);
+    // Decode level 2 (cipher with no wrap)
+    String decodedMsg2 = decode(decodedMsg1);
+    Input.writeFile("Decode2.txt", decodedMsg2);
+    // Decode level 3 (substitution)
+    String decodedMsg3 = subEncryption(decodedMsg2, sub2, sub);
+    Input.writeFile("Decode3.txt", decodedMsg3);
 String encryptedText = Input.readFile("Encode3.txt");
 
 
 // Reverse string back
 String dec1 = reverse(encryptedText);
-Input.writeFile("Decode1.txt", dec1);
+Input.writeFile("decode1.txt", dec1);
 
 
 // ASCII -1 cipher
 String dec2 = shiftBackward(dec1);
-Input.writeFile("Decode2.txt", dec2);
+Input.writeFile("decode2.txt", dec2);
 
 
 // Reverse Webdings substitution
 String dec3 = substitute(dec2, symbols, letters);
-Input.writeFile("Decode3.txt", dec3);
+Input.writeFile("decode3.txt", dec3);
 }
 
 
